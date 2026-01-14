@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getOrderById, updateOrder } from "../../api/orderApi";
-import type { OrderRequest } from "../../Dtos/request/OrderResquest";
+import { getOrderById, updateOrder } from "../../../api/orderApi";
+import type { OrderRequest } from "../../../Dtos/request/OrderResquest";
 
 type ItemForm = {
   productId: string;

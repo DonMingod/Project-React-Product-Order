@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getOrders, deleteOrder } from "../../api/orderApi";
-import type { OrderResponse } from "../../Dtos/response/OrderResponse";
+import { getOrders, deleteOrder } from "../../../api/orderApi";
+import type { OrderResponse } from "../../../Dtos/response/OrderResponse";
 
 export default function OrderList() {
   const [orders, setOrders] = useState<OrderResponse[]>([]);
@@ -50,7 +50,7 @@ export default function OrderList() {
                     <td className="p-3">{order.items.length}</td>
                     <td className="p-3">
                       <Link to={`/edit/${order.id}`}>
-                        <button className="bg-blue-600 text-white px-3 py-1 rounded-md mr-2">
+                        <button className="bg-[#17553e] text-white px-3 py-1 rounded-md mr-2">
                           Editar
                         </button>
                       </Link>
@@ -61,7 +61,7 @@ export default function OrderList() {
                             setOrders(prev => prev.filter(o => o.id !== order.id))
                           );
                         }}
-                        className="bg-red-600 text-white px-3 py-1 rounded-md"
+                        className="bg-[#3b1215] text-white px-3 py-1 rounded-md"
                       >
                         Delete
                       </button>

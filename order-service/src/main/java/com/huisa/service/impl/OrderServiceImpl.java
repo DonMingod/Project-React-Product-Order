@@ -4,6 +4,7 @@ import com.huisa.configclient.ProductClient;
 import com.huisa.dto.OrderRequest;
 import com.huisa.dto.OrderResponse;
 import com.huisa.model.Order;
+import com.huisa.model.OrderItem;
 import com.huisa.repository.OrderRepository;
 import com.huisa.service.OrderService;
 import com.huisa.util.OrderMapper;
@@ -71,16 +72,48 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toDto(orderRepository.save(order));
     }
 
-
-
     @Override
     public OrderResponse updateOrder(Long id, OrderRequest orderRequest) {
-        Order orderFound = orderRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Order not found with id: " + id)
-        );
-        Order updatedOrder = orderRepository.save(orderFound);
-        return orderMapper.toDto(updatedOrder);
+
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(
+                        "Order not found with id: " + id
+                ));
+        order.setCustomerName(orderRequest.customerName());
+        order.getItems().clear();
+        orderRequest.items().forEach(itemRequest -> {
+
+            var product = productClient.getProductById(itemRequest.productId());
+
+            OrderItem item = OrderItem.builder()
+                    .productId(product.id())
+                    .productName(product.name())
+                    .price(product.price())
+                    .quantity(itemRequest.quantity())
+                    .order(order)
+                    .build();
+
+            order.getItems().add(item);
+        });
+        BigDecimal total = order.getItems().stream()
+                .map(i -> i.getPrice()
+                        .multiply(BigDecimal.valueOf(i.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        order.setTotal(total);
+
+        return orderMapper.toDto(orderRepository.save(order));
     }
+
+
+   // @Override
+    //public OrderResponse updateOrder(Long id, OrderRequest orderRequest) {
+      //  Order orderFound = orderRepository.findById(id).orElseThrow(
+        //        () -> new RuntimeException("Order not found with id: " + id)
+       // );
+       // Order updatedOrder = orderRepository.save(orderFound);
+       // return orderMapper.toDto(updatedOrder);
+   // } -->
 
     @Override
     public void deleteOrder(Long id) {

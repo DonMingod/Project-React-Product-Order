@@ -9,7 +9,6 @@ export default function Toolbar() {
           <div className="flex items-center gap-4">
             <div className="text-xl font-bold text-[#003973]">OrderApp</div>
             <nav className="hidden md:flex gap-3 text-sm">
-              {/* placeholder links */}
             </nav>
           </div>
           <div>

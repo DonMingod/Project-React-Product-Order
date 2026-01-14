@@ -15,5 +15,6 @@ export default function Panel({ title, toolbar, children }: Props) {
       </div>
       <div>{children}</div>
     </div>
+    
   );
 }
